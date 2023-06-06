@@ -1,17 +1,17 @@
 {
-  "name": "nodebb-plugin-quickstart",
-  "version": "0.4.3",
-  "description": "A starter kit for quickly creating NodeBB plugins",
+  "name": "nodebb-plugin-filter-post-content",
+  "version": "1.0.0",
+  "description": "filter-post-content",
   "main": "library.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nodebb/nodebb-plugin-quickstart"
+    "url": "git@github.com:woodchenpengsheng/lovecandies_tool.git"
   },
   "keywords": [
     "nodebb",
     "plugin",
-    "quickstart",
-    "shell"
+    "filter",
+    "post"
   ],
   "husky": {
     "hooks": {
@@ -24,10 +24,6 @@
       "eslint --fix",
       "git add"
     ]
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/nodebb/nodebb-plugin-quickstart/issues"
   },
   "readmeFilename": "README.md",
   "nbbpm": {

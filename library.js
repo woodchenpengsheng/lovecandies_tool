@@ -15,7 +15,7 @@ plugin.init = async (params) => {
 	const { router /* , middleware , controllers */ } = params;
 
 	// Settings saved in the plugin settings can be retrieved via settings methods
-	const { setting1, setting2 } = await meta.settings.get('quickstart');
+	const { setting1, setting2 } = await meta.settings.get('filterpostcontent');
 	if (setting1) {
 		console.log(setting2);
 	}
@@ -26,15 +26,15 @@ plugin.init = async (params) => {
 	 *
 	 * Other helpers include `setupAdminPageRoute` and `setupAPIRoute`
 	 * */
-	routeHelpers.setupPageRoute(router, '/quickstart', [(req, res, next) => {
-		winston.info(`[plugins/quickstart] In middleware. This argument can be either a single middleware or an array of middlewares`);
+	routeHelpers.setupPageRoute(router, '/filterpostcontent', [(req, res, next) => {
+		winston.info(`[plugins/filterpostcontent] In middleware. This argument can be either a single middleware or an array of middlewares`);
 		setImmediate(next);
 	}], (req, res) => {
-		winston.info(`[plugins/quickstart] Navigated to ${nconf.get('relative_path')}/quickstart`);
-		res.render('quickstart', { uid: req.uid });
+		winston.info(`[plugins/filterpostcontent] Navigated to ${nconf.get('relative_path')}/filterpostcontent`);
+		res.render('filterpostcontent', { uid: req.uid });
 	});
 
-	routeHelpers.setupAdminPageRoute(router, '/admin/plugins/quickstart', [], controllers.renderAdminPage);
+	routeHelpers.setupAdminPageRoute(router, '/admin/plugins/filterpostcontent', [], controllers.renderAdminPage);
 };
 
 /**
@@ -48,7 +48,7 @@ plugin.init = async (params) => {
  *
  * To call this example route:
  *   curl -X GET \
- * 		http://example.org/api/v3/plugins/quickstart/test \
+ * 		http://example.org/api/v3/plugins/filterpostcontent/test \
  * 		-H "Authorization: Bearer some_valid_bearer_token"
  *
  * Will yield the following response JSON:
@@ -65,10 +65,10 @@ plugin.init = async (params) => {
 plugin.addRoutes = async ({ router, middleware, helpers }) => {
 	const middlewares = [
 		middleware.ensureLoggedIn,			// use this if you want only registered users to call this route
-		// middleware.admin.checkPrivileges,	// use this to restrict the route to administrators
+		middleware.admin.checkPrivileges,	// use this to restrict the route to administrators
 	];
 
-	routeHelpers.setupApiRoute(router, 'get', '/quickstart/:param1', middlewares, (req, res) => {
+	routeHelpers.setupApiRoute(router, 'get', '/filterpostcontent/:param1', middlewares, (req, res) => {
 		helpers.formatApiResponse(200, res, {
 			foobar: req.params.param1,
 		});
@@ -77,12 +77,16 @@ plugin.addRoutes = async ({ router, middleware, helpers }) => {
 
 plugin.addAdminNavigation = (header) => {
 	header.plugins.push({
-		route: '/plugins/quickstart',
+		route: '/plugins/filterpostcontent',
 		icon: 'fa-tint',
-		name: 'Quickstart',
+		name: 'FilterPostContent',
 	});
 
 	return header;
 };
+
+plugin.filterPostContent = () => {
+	
+}
 
 module.exports = plugin;

@@ -1,17 +1,17 @@
 {
-	"id": "nodebb-plugin-quickstart",
-	"url": "https://github.com/NodeBB/nodebb-plugin-quickstart",
+	"id": "nodebb-plugin-lovecandies-filter-post-content",
 	"library": "./library.js",
 	"hooks": [
 		{ "hook": "static:app.load", "method": "init" },
 		{ "hook": "static:api.routes", "method": "addRoutes" },
-		{ "hook": "filter:admin.header.build", "method": "addAdminNavigation" }
+		{ "hook": "filter:admin.header.build", "method": "addAdminNavigation" },
+		{ "hook": "filter:post.getFields", "method": "filterPostContent" }
 	],
 	"staticDirs": {
 		"static": "./static"
 	},
 	"scss": [
-		"static/scss/quickstart.scss"
+		"static/scss/filterpostcontent.scss"
 	],
 	"scripts": [
 		"static/lib/main.js"
@@ -20,8 +20,8 @@
 		"static/lib/acp-main.js"
 	],
 	"modules": {
-		"../client/quickstart.js": "./static/lib/quickstart.js",
-		"../admin/plugins/quickstart.js": "./static/lib/admin.js"
+		"../client/filterpostcontent.js": "./static/lib/filterpostcontent.js",
+		"../admin/plugins/filterpostcontent.js": "./static/lib/admin.js"
 	},
 	"templates": "static/templates"
 }
