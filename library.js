@@ -1,5 +1,6 @@
 'use strict';
 
+/* eslint-disable no-tabs */
 const nconf = require.main.require('nconf');
 const winston = require.main.require('winston');
 
@@ -64,8 +65,8 @@ plugin.init = async (params) => {
  */
 plugin.addRoutes = async ({ router, middleware, helpers }) => {
 	const middlewares = [
-		middleware.ensureLoggedIn,			// use this if you want only registered users to call this route
-		middleware.admin.checkPrivileges,	// use this to restrict the route to administrators
+		middleware.ensureLoggedIn, // use this if you want only registered users to call this route
+		middleware.admin.checkPrivileges, // use this to restrict the route to administrators
 	];
 
 	routeHelpers.setupApiRoute(router, 'get', '/filterpostcontent/:param1', middlewares, (req, res) => {
@@ -85,8 +86,20 @@ plugin.addAdminNavigation = (header) => {
 	return header;
 };
 
-plugin.filterPostContent = () => {
-	
-}
+plugin.filterPostContent = (postFieldData) => {
+	const { posts, fields } = postFieldData;
+	const pattern = /(联系方式|微信|电话|QQ)(:|：)(\s)*(1[0-9]{10}|[a-zA-Z0-9\-_]{6,16}|[0-9]{6,11})+/gi;
+	const replacedText = '<span style="color:red">付费解锁哦</span>';
+	if (fields.length <= 0 || fields.includes('content')) {
+		posts.forEach((postData) => {
+			if (!postData || !postData.content) {
+				return;
+			}
+			postData.originContent = postData.content;
+			postData.content = postData.content.replace(pattern, replacedText);
+		});
+	}
+	return postFieldData;
+};
 
 module.exports = plugin;
