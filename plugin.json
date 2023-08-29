@@ -1,6 +1,5 @@
 {
-	"id": "nodebb-plugin-quickstart",
-	"url": "https://github.com/NodeBB/nodebb-plugin-quickstart",
+	"id": "nodebb-plugin-lovecandies-recharge",
 	"library": "./library.js",
 	"hooks": [
 		{ "hook": "static:app.load", "method": "init" },
@@ -11,7 +10,7 @@
 		"static": "./static"
 	},
 	"scss": [
-		"static/scss/quickstart.scss"
+		"static/scss/recharge.scss"
 	],
 	"scripts": [
 		"static/lib/main.js"
@@ -20,8 +19,8 @@
 		"static/lib/acp-main.js"
 	],
 	"modules": {
-		"../client/quickstart.js": "./static/lib/quickstart.js",
-		"../admin/plugins/quickstart.js": "./static/lib/admin.js"
+		"../client/recharge.js": "./static/lib/recharge.js",
+		"../admin/plugins/recharge.js": "./static/lib/admin.js"
 	},
 	"templates": "static/templates"
 }
