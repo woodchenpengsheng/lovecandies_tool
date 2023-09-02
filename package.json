@@ -41,5 +41,8 @@
     "eslint-plugin-import": "2.x",
     "husky": "8.0.3",
     "lint-staged": "14.0.1"
+  },
+  "dependencies": {
+    "node-fetch-commonjs": "^3.3.1"
   }
 }

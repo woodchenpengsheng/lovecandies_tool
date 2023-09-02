@@ -12,7 +12,7 @@ const routeHelpers = require.main.require('./src/routes/helpers');
 const plugin = {};
 
 plugin.init = async (params) => {
-	const { router /* , middleware , controllers */ } = params;
+	const { router, middleware /* controllers */ } = params;
 
 	// Settings saved in the plugin settings can be retrieved via settings methods
 	const { setting1, setting2 } = await meta.settings.get('recharge');
@@ -29,7 +29,7 @@ plugin.init = async (params) => {
 	routeHelpers.setupPageRoute(router, '/recharge', [(req, res, next) => {
 		winston.info(`[plugins/recharge] In middleware. This argument can be either a single middleware or an array of middlewares`);
 		setImmediate(next);
-	}], (req, res) => {
+	}, middleware.ensureLoggedIn], (req, res) => {
 		winston.info(`[plugins/recharge] Navigated to ${nconf.get('relative_path')}/recharge`);
 		res.render('recharge', { uid: req.uid });
 	});
@@ -68,11 +68,7 @@ plugin.addRoutes = async ({ router, middleware, helpers }) => {
 		// middleware.admin.checkPrivileges,	// use this to restrict the route to administrators
 	];
 
-	routeHelpers.setupApiRoute(router, 'get', '/recharge/:param1', middlewares, (req, res) => {
-		helpers.formatApiResponse(200, res, {
-			foobar: req.params.param1,
-		});
-	});
+	routeHelpers.setupApiRoute(router, 'post', '/recharge/pay/', middlewares, controllers.handleRechargeRequest);
 };
 
 plugin.addAdminNavigation = (header) => {
