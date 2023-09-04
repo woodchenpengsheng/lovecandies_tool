@@ -65,7 +65,7 @@ plugin.init = async (params) => {
 plugin.addRoutes = async ({ router, middleware, helpers }) => {
 	const middlewares = [
 		middleware.ensureLoggedIn,			// use this if you want only registered users to call this route
-		// middleware.admin.checkPrivileges,	// use this to restrict the route to administrators
+		// middleware.admin.checkPrivileges,	// use this to restrict the route to administrators	
 	];
 
 	routeHelpers.setupApiRoute(router, 'post', '/recharge/pay/', middlewares, controllers.handleRechargeRequest);

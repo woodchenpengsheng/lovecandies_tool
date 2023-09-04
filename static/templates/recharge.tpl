@@ -12,7 +12,7 @@
                         ">服务名称</span>
                     </div>
                     <div style="display: table-cell; vertical-align: middle;">
-                        <span>月卡</span>
+                        <span>测试</span>
                     </div>
                 </div>
                 <div style="display: table-row;">
@@ -25,10 +25,10 @@
                         ">当前价格</span>
                     </div>
                     <div style="display: table-cell; vertical-align: middle; font-size: 12px; color: #9E9E9E;">
-                        <span style="text-decoration: line-through;">原价:<i>99</i>元</span>
+                        <span style="text-decoration: line-through;">原价:<i>10</i>元</span>
                         <span>
                             现价:
-                            <i style="color: #ff7f0d; font-weight: bold; font-size: 25px; font-family: Georgia;">79</i>
+                            <i style="color: #ff7f0d; font-weight: bold; font-size: 25px; font-family: Georgia;">10</i>
                             元
                         </span>
                     </div>
