@@ -1,5 +1,5 @@
 {
-	"id": "nodebb-plugin-lovecandies-recharge",
+	"id": "nodebb-plugin-recharge",
 	"library": "./library.js",
 	"hooks": [
 		{ "hook": "static:app.load", "method": "init" },

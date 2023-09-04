@@ -1,7 +1,7 @@
 {
   "name": "nodebb-plugin-recharge",
   "version": "0.4.3",
-  "description": "A starter kit for quickly creating NodeBB plugins",
+  "description": "添加支付功能",
   "main": "library.js",
   "repository": {
     "type": "git",
