@@ -69,6 +69,7 @@ plugin.addRoutes = async ({ router, middleware, helpers }) => {
 	];
 
 	routeHelpers.setupApiRoute(router, 'post', '/recharge/pay/', middlewares, controllers.handleRechargeRequest);
+	routeHelpers.setupApiRoute(router, "post", '/recharge/notify/', middlewares, controllers.handleNotifyRequest);
 };
 
 plugin.addAdminNavigation = (header) => {
