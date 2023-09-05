@@ -44,7 +44,7 @@
                     </div>
                     <div style="display: table-cell; vertical-align: middle;">
                         <span>
-                            开通非免费区的访问权限
+                            测试中ing
                         </span>
                     </div>
                 </div>
