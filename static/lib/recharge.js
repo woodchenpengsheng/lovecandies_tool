@@ -12,7 +12,6 @@ define('forum/recharge', ['components', 'api', 'alerts'], function (components, 
 	};
 
 	components.get("recharge/pay/button").on('click', function (e) {
-		console.log("click啦", ajaxify, config, config.csrf_token);
 		const serviceType = $(this).attr('data-service-type');
 		const data = {
 			serviceType,
