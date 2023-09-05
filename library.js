@@ -62,10 +62,6 @@ plugin.init = async (params) => {
  *		}
  *	}
  */
-plugin.disableCSRFMiddle = (req, res, next) => {
-	req.csrfExempt = true;
-	next();
-}
 plugin.addRoutes = async ({ router, middleware, helpers }) => {
 	const middlewares = [
 		middleware.ensureLoggedIn,			// use this if you want only registered users to call this route
@@ -73,7 +69,7 @@ plugin.addRoutes = async ({ router, middleware, helpers }) => {
 	];
 
 	routeHelpers.setupApiRoute(router, 'post', '/recharge/pay/', middlewares, controllers.handleRechargeRequest);
-	routeHelpers.setupApiRoute(router, "post", '/recharge/notify/', [plugin.disableCSRFMiddle, ...middlewares], controllers.handleNotifyRequest);
+	routeHelpers.setupApiRoute(router, "post", '/recharge/notify/', middlewares, controllers.handleNotifyRequest);
 };
 
 plugin.addAdminNavigation = (header) => {
@@ -85,5 +81,10 @@ plugin.addAdminNavigation = (header) => {
 
 	return header;
 };
+
+plugin.authenticateSkip = (data) => {
+	data.skip.post.push("/api/v3/plugins/recharge/notify");
+	return data;
+}
 
 module.exports = plugin;
