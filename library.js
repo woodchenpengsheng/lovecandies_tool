@@ -13,13 +13,7 @@ const plugin = {};
 
 plugin.init = async (params) => {
 	const { router, middleware /* controllers */ } = params;
-
 	// Settings saved in the plugin settings can be retrieved via settings methods
-	const { setting1, setting2 } = await meta.settings.get('recharge');
-	if (setting1) {
-		console.log(setting2);
-	}
-
 	/**
 	 * We create two routes for every view. One API call, and the actual route itself.
 	 * Use the `setupPageRoute` helper and NodeBB will take care of everything for you.
@@ -82,8 +76,13 @@ plugin.addAdminNavigation = (header) => {
 	return header;
 };
 
-plugin.authenticateSkip = (data) => {
-	data.skip.post.push("/api/v3/plugins/recharge/notify");
+plugin.authenticateSkip = async (data) => {
+	const metaSettings = await meta.settings.get("recharge");
+	const notifyURL = metaSettings["notify-url"];
+	if (!notifyURL) {
+		return data;
+	}
+	data.skip.post.push(notifyURL);
 	return data;
 }
 
