@@ -23,9 +23,10 @@ plugin.init = async (params) => {
 	routeHelpers.setupPageRoute(router, '/recharge', [(req, res, next) => {
 		winston.info(`[plugins/recharge] In middleware. This argument can be either a single middleware or an array of middlewares`);
 		setImmediate(next);
-	}, middleware.ensureLoggedIn], (req, res) => {
+	}, middleware.ensureLoggedIn], async (req, res) => {
 		winston.info(`[plugins/recharge] Navigated to ${nconf.get('relative_path')}/recharge`);
-		res.render('recharge', { uid: req.uid });
+		const rechargeData = await meta.settings.get("recharge");
+		res.render('recharge', { uid: req.uid, services: rechargeData["services-list"]});
 	});
 
 	routeHelpers.setupAdminPageRoute(router, '/admin/plugins/recharge', controllers.renderAdminPage);

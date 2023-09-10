@@ -12,9 +12,9 @@ define('forum/recharge', ['components', 'api', 'alerts'], function (components, 
 	};
 
 	components.get("recharge/pay/button").on('click', function (e) {
-		const serviceType = $(this).attr('data-service-type');
+		const serviceId = $(this).attr('data-service-id');
 		const data = {
-			serviceType,
+			serviceId,
 		};
 
 		api.post("/plugins/recharge/pay", data, function (err, data) {
