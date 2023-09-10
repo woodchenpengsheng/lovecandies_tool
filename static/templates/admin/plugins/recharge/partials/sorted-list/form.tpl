@@ -5,7 +5,7 @@
     </div>
     <div class="mb-3">
         <label class="form-label" for="serviceId">服务ID</label>
-        <input type="text" id="serviceId" name="serviceId" class="form-control" placeholder="服务ID" />
+        <input type="text" id="serviceId" name="serviceId" class="form-control" placeholder="服务ID" readonly/>
     </div>
         <div class="mb-3">
         <label class="form-label" for="servicePrice">服务价格</label>

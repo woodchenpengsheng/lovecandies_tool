@@ -8,6 +8,7 @@
 
 import { save, load } from 'settings';
 import * as uploader from 'uploader';
+import * as hooks from 'hooks';
 
 export function init() {
 	handleSettingsForm();
@@ -17,11 +18,26 @@ export function init() {
 function handleSettingsForm() {
 	load('recharge', $('.recharge-settings'), function () {
 		setupColorInputs();
+		handleServiceId();
 	});
 
 	$('#save').on('click', () => {
 		save('recharge', $('.recharge-settings')); // pass in a function in the 3rd parameter to override the default success/failure handler
 	});
+}
+
+function handleServiceId() {
+	hooks.on("action:settings.sorted-list.modal", (data) => {
+		const originServiceId = $(data.modal).find('input[name="serviceId"]').val();
+		// 说明是编辑状态，不用重新获取新的服务编号
+		if (originServiceId) {
+			return;
+		}
+		// 说明是新建，需要重新拿编号
+		socket.emit('admin.plugins.recharge.getServiceId', (err, serviceId) => {
+			$(data.modal).find('input[name="serviceId"]').val(serviceId);
+		})
+	})
 }
 
 function setupColorInputs() {

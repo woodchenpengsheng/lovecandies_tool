@@ -8,8 +8,16 @@ const meta = require.main.require('./src/meta');
 const controllers = require('./lib/controllers');
 
 const routeHelpers = require.main.require('./src/routes/helpers');
+const socketAdmin = require.main.require('./src/socket.io/admin');
+const DataBase = require('./lib/database/index.js');
 
 const plugin = {};
+
+socketAdmin.plugins.recharge = {};
+
+socketAdmin.plugins.recharge.getServiceId = async function () {
+	return await DataBase.getNextServiceId();
+};
 
 plugin.init = async (params) => {
 	const { router, middleware /* controllers */ } = params;
