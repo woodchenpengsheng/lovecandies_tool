@@ -19,15 +19,24 @@
 					</div>
 					<div class="mb-3">
 						<label class="form-label" for="notify-url">交易成功通知url</label>
-						<input type="text" id="notify-url" name="notify-url"
-							title="notify-url" class="form-control"
+						<input type="text" id="notify-url" name="notify-url" title="notify-url" class="form-control"
 							placeholder="/recharge/notify">
 					</div>
 					<div class="mb-3">
 						<label class="form-label" for="api-key">API KEY</label>
-						<input type="text" id="api-key" name="api-key"
-							title="api-key" class="form-control"
+						<input type="text" id="api-key" name="api-key" title="api-key" class="form-control"
 							placeholder="vILZUSj9YPDXeGQTJ1ImAOZtC12ec5kR5kAzOcTPY2cHiE0sSCRAzyp90H52L2d6">
+					</div>
+				</div>
+
+				<div class="mb-4">
+					<h5 class="fw-bold tracking-tight settings-header">服务名称列表</h5>
+
+					<div class="mb-3" data-type="sorted-list" data-sorted-list="services-list"
+						data-item-template="admin/plugins/recharge/partials/sorted-list/item"
+						data-form-template="admin/plugins/recharge/partials/sorted-list/form">
+						<ul data-type="list" class="list-group mb-2"></ul>
+						<button type="button" data-type="add" class="btn btn-info">增加服务类型</button>
 					</div>
 				</div>
 
@@ -47,17 +56,6 @@
 						<input data-settings="colorpicker" type="color" id="bgColor" name="bgColor"
 							title="Background Color" class="form-control p-1" placeholder="#000000" value="#000000"
 							style="width: 64px;" />
-					</div>
-				</div>
-
-				<div class="mb-4">
-					<h5 class="fw-bold tracking-tight settings-header">Sorted List</h5>
-
-					<div class="mb-3" data-type="sorted-list" data-sorted-list="sample-list"
-						data-item-template="admin/plugins/recharge/partials/sorted-list/item"
-						data-form-template="admin/plugins/recharge/partials/sorted-list/form">
-						<ul data-type="list" class="list-group mb-2"></ul>
-						<button type="button" data-type="add" class="btn btn-info">Add Item</button>
 					</div>
 				</div>
 
