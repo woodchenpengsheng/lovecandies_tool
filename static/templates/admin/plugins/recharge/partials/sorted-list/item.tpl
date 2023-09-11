@@ -17,6 +17,10 @@
                 <label class="form-label" for="serviceDescription">服务介绍</label>
                 <p class="form-text">{serviceDescription}</p>
             </div>
+            <div class="mb-3">
+                <label class="form-label" for="serviceTypes">服务类型</label>
+                <p class="form-text">{serviceTypes}</p>
+            </div>
         </div>
         <div class="d-flex gap-1 flex-nowrap">
             <button type="button" data-type="edit" class="btn btn-sm btn-info">Edit</button>

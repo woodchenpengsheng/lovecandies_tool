@@ -9,6 +9,7 @@
 import { save, load } from 'settings';
 import * as uploader from 'uploader';
 import * as hooks from 'hooks';
+import { serviceTypes } from '../../lib/rechargeDefine';
 
 export function init() {
 	handleSettingsForm();
@@ -16,6 +17,7 @@ export function init() {
 };
 
 function handleSettingsForm() {
+	handleLoadServiceTypes();
 	load('recharge', $('.recharge-settings'), function () {
 		setupColorInputs();
 		handleServiceId();
@@ -37,6 +39,17 @@ function handleServiceId() {
 		socket.emit('admin.plugins.recharge.getServiceId', (err, serviceId) => {
 			$(data.modal).find('input[name="serviceId"]').val(serviceId);
 		})
+	})
+}
+
+function handleLoadServiceTypes() {
+	const handleServiceTypes = Object.keys(serviceTypes).map(
+		code => ({ name: serviceTypes[code], value: code, selected: false })
+	);
+
+	hooks.on("filter:settings.sorted-list.load", async (data) => {
+		data.formValues.serviceTypes = handleServiceTypes;
+		return data
 	})
 }
 
