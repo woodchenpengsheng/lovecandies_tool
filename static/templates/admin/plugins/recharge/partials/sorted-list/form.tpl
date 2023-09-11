@@ -23,4 +23,8 @@
             <!-- END serviceTypes -->
         </select>
     </div>
+    <div class="mb-3">
+        <label class="form-label" for="serviceParams">其他参数</label>
+        <input type="text" id="serviceParams" name="serviceParams" class="form-control" placeholder="其他参数" />
+    </div>
 </form>
