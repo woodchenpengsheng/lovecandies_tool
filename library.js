@@ -4,6 +4,7 @@ const nconf = require.main.require('nconf');
 const winston = require.main.require('winston');
 
 const meta = require.main.require('./src/meta');
+const user = require.main.require('./src/user');
 
 const controllers = require('./lib/controllers');
 
@@ -18,6 +19,21 @@ socketAdmin.plugins.recharge = {};
 socketAdmin.plugins.recharge.getServiceId = async function () {
 	return await DataBase.getNextServiceId();
 };
+
+socketAdmin.plugins.recharge.directAddReputation = async function(socket, data) {
+	const { userName, reputation } = data;
+	const reputationAdd = parseInt(reputation, 10);
+	if (!userName || !reputationAdd) {
+		throw Error("uid或者reputation参数异常");
+	}
+
+	const uid = await user.getUidByUsername(data.userName);
+	if (!uid) {
+		throw Error('无法查找到该user，检查是否名字异常');
+	}
+
+	return await user.incrementUserReputationBy(uid, reputationAdd);
+}
 
 plugin.init = async (params) => {
 	const { router, middleware /* controllers */ } = params;
@@ -93,6 +109,13 @@ plugin.authenticateSkip = async (data) => {
 	}
 	data.skip.post.push(notifyURL);
 	return data;
+}
+
+plugin.getThemeTopicData = async function(hookData) {
+	const { topic } = hookData;
+	const metaSettings = await meta.settings.get("recharge");
+	topic["unlock::consume::reputation"] = parseInt(metaSettings["assume-reputation"]);
+	return hookData;
 }
 
 module.exports = plugin;

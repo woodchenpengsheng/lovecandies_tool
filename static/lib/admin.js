@@ -9,6 +9,7 @@
 import { save, load } from 'settings';
 import * as uploader from 'uploader';
 import * as hooks from 'hooks';
+import * as alerts from 'alerts';
 import { serviceTypes } from '../../lib/rechargeDefine';
 
 export function init() {
@@ -21,10 +22,25 @@ function handleSettingsForm() {
 	load('recharge', $('.recharge-settings'), function () {
 		setupColorInputs();
 		handleServiceId();
+		handleDirectAddReputation();
 	});
 
 	$('#save').on('click', () => {
 		save('recharge', $('.recharge-settings')); // pass in a function in the 3rd parameter to override the default success/failure handler
+	});
+}
+
+function handleDirectAddReputation() {
+	$('#start-add-reputation').on('click', function (event) {
+		socket.emit('admin.plugins.recharge.directAddReputation', {
+			userName: $('#reputation-add-user-name').val(),
+			reputation: $('#reputation-add-value').val(),
+		}, function (err, currentReputation) {
+			if (err) {
+				return alerts.error(err);
+			}
+			alerts.success(`增加声望成功，用户现在的声望值为：${currentReputation}`);
+		}); 
 	});
 }
 

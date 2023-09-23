@@ -1,9 +1,29 @@
 <div class="acp-page-container">
 	<!-- IMPORT admin/partials/settings/header.tpl -->
-
 	<div class="row m-0">
 		<div id="spy-container" class="col-12 col-md-8 px-0 mb-4" tabindex="0">
 			<form role="form" class="recharge-settings">
+				<div class="mb-4">
+					<h5 class="fw-bold tracking-tight settings-header">付费配置区</h5>
+					<div class="mb-3">
+						<label class="form-label" for="assume-reputation">解锁联系方式消耗的声望值</label>
+						<input type="text" id="assume-reputation" name="assume-reputation" title="assume-reputation"
+							class="form-control" placeholder="20">
+					</div>
+
+					<div class="mb-3">
+						<div class="card">
+							<div class="card-body">
+								<h5 class="card-title">GM直接增加声望接口</h5>
+								<label class="form-label">请输入用户的userName</label>
+								<input type="text" id="reputation-add-user-name" class="form-control">
+								<label class="form-label">请输入增加的声望值</label>
+								<input type="text" id="reputation-add-value" class="form-control mb-4">
+								<button type="button" class="btn btn-danger" id="start-add-reputation" class="form-control">增加声望</button>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="mb-4">
 					<h5 class="fw-bold tracking-tight settings-header">BTC配置区</h5>
 					<div class="mb-3">
