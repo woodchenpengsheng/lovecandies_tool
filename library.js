@@ -5,6 +5,7 @@ const winston = require.main.require('winston');
 
 const meta = require.main.require('./src/meta');
 const user = require.main.require('./src/user');
+const privileges =  require.main.require('./src/privileges');
 
 const controllers = require('./lib/controllers');
 
@@ -116,6 +117,64 @@ plugin.getThemeTopicData = async function(hookData) {
 	const metaSettings = await meta.settings.get("recharge");
 	topic["unlock::consume::reputation"] = parseInt(metaSettings["assume-reputation"]);
 	return hookData;
+}
+
+// {{{ each thread_tools }}}
+//		<li><a href="#" class="dropdown-item rounded-1 d-flex align-items-center gap-2 {./class}"><i class="fa fa-fw text-muted {./icon}"></i> {./title}</a></li>
+// {{{ end }}}
+plugin.addTopicThreadTools = async function(hookData) {
+	const { topic, uid, tools } = hookData;
+	const userPrivileges = await privileges.topics.get(topic.tid, uid);
+	if (userPrivileges["topics:free-reputation"]) {
+		tools.push({ class: "free-reputation-topic", icon: "fa-earth-asia", title: "免费主题" })
+	}
+
+	if (userPrivileges["topics:reset-reputation"]) {
+		tools.push({ class: "reset-reputation-topic", icon: "fa-truck", title: "将主题重新设置为默认付费" })
+	}
+	return hookData;
+}
+
+// privileges	参数
+// {
+// 	'topics:reply': (privData['topics:reply'] && ((!topicData.locked && mayReply) || isModerator)) || isAdministrator,
+// 	'topics:read': privData['topics:read'] || isAdministrator,
+// 	'topics:schedule': privData['topics:schedule'] || isAdministrator,
+// 	'topics:tag': privData['topics:tag'] || isAdministrator,
+// 	'topics:delete': (privData['topics:delete'] && (isOwner || isModerator)) || isAdministrator,
+// 	'posts:edit': (privData['posts:edit'] && (!topicData.locked || isModerator)) || isAdministrator,
+// 	'posts:history': privData['posts:history'] || isAdministrator,
+// 	'posts:upvote': privData['posts:upvote'] || isAdministrator,
+// 	'posts:downvote': privData['posts:downvote'] || isAdministrator,
+// 	'posts:delete': (privData['posts:delete'] && (!topicData.locked || isModerator)) || isAdministrator,
+// 	'posts:view_deleted': privData['posts:view_deleted'] || isAdministrator,
+// 	read: privData.read || isAdministrator,
+// 	purge: (privData.purge && (isOwner || isModerator)) || isAdministrator,
+
+// 	view_thread_tools: editable || deletable,
+// 	editable: editable,
+// 	deletable: deletable,
+// 	view_deleted: isAdminOrMod || isOwner || privData['posts:view_deleted'],
+// 	view_scheduled: privData['topics:schedule'] || isAdministrator,
+// 	isAdminOrMod: isAdminOrMod,
+// 	disabled: disabled,
+// 	tid: tid,
+// 	uid: uid,
+//  cid: cid
+// }
+plugin.getTopicPrivileges = async function(privileges) {
+	const { uid, cid } = privileges;
+	const [isAdministrator, isModerator] = await Promise.all([
+		user.isAdministrator(uid),
+		user.isModerator(uid, cid),
+	]);
+
+	if (isAdministrator || isModerator) {
+		privileges["topics:free-reputation"] = true;
+		privileges["topics:reset-reputation"] = true;
+	}
+
+	return privileges;
 }
 
 module.exports = plugin;

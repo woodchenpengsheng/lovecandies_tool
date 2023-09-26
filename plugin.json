@@ -6,7 +6,9 @@
 		{ "hook": "static:api.routes", "method": "addRoutes" },
 		{ "hook": "filter:admin.header.build", "method": "addAdminNavigation" },
 		{ "hook": "filter:middleware.authenticate", "method": "authenticateSkip"},
-		{ "hook": "filter:topic.get", "method": "getThemeTopicData"}
+		{ "hook": "filter:topic.get", "method": "getThemeTopicData"},
+		{ "hook": "filter:topic.thread_tools", "method": "addTopicThreadTools"},
+		{ "hook": "filter:privileges.topics.get", "method": "getTopicPrivileges"}
 	],
 	"staticDirs": {
 		"static": "./static"
@@ -22,6 +24,7 @@
 	],
 	"modules": {
 		"../client/recharge.js": "./static/lib/recharge.js",
+		"../client/topic/freeReputation.js": "./static/lib/freeReputation.js",
 		"../admin/plugins/recharge.js": "./static/lib/admin.js"
 	},
 	"templates": "static/templates"
