@@ -5,6 +5,7 @@ const winston = require.main.require('winston');
 
 const meta = require.main.require('./src/meta');
 const user = require.main.require('./src/user');
+const events = require.main.require('./src/events');
 const privileges =  require.main.require('./src/privileges');
 
 const controllers = require('./lib/controllers');
@@ -45,8 +46,13 @@ plugin.init = async (params) => {
 	 *
 	 * Other helpers include `setupAdminPageRoute` and `setupAPIRoute`
 	 * */
-	routeHelpers.setupPageRoute(router, '/recharge', [(req, res, next) => {
+	routeHelpers.setupPageRoute(router, '/recharge', [async (req, res, next) => {
 		winston.info(`[plugins/recharge] In middleware. This argument can be either a single middleware or an array of middlewares`);
+		await events.log({
+			type: 'enter-recharge-page',
+			ip: req.ip,
+			uid: req.uid,
+		});
 		setImmediate(next);
 	}, middleware.ensureLoggedIn], async (req, res) => {
 		winston.info(`[plugins/recharge] Navigated to ${nconf.get('relative_path')}/recharge`);
