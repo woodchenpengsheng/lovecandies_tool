@@ -12,6 +12,12 @@
 					</div>
 
 					<div class="mb-3">
+						<label class="form-label" for="recharge-group-name">付费之后加入的组名</label>
+						<input type="text" id="recharge-group-name" name="recharge-group-name" title="recharge-group-name"
+							class="form-control" placeholder="付费用户加入的组名">
+					</div>
+
+					<div class="mb-3">
 						<div class="card">
 							<div class="card-body">
 								<h5 class="card-title">GM直接增加声望接口</h5>
