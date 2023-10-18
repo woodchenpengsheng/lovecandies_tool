@@ -30,7 +30,8 @@
                             <span>
                                 现价:
                                 <i style="color: #ff7f0d; font-weight: bold; font-size: 25px; font-family: Georgia;">{./servicePrice}</i>
-                                元
+                                {{{ if ./rechargePriceCurrency.yuan }}}元{{{end}}}
+                                {{{ if ./rechargePriceCurrency.reputation }}}声望{{{end}}}
                             </span>
                         </div>
                     </div>
@@ -52,6 +53,8 @@
                 </div>
                 <div style="padding-bottom: 10px;border-bottom: 5px solid #efeff4;padding-top: 10px;">
                     <button class="btn btn-no-border" component="recharge/pay/button" data-service-id={./serviceId}
+                        data-currency-reputation={./rechargePriceCurrency.reputation}
+                        data-service-price={./servicePrice}
                         style="
                             width: 100%;
                             color: #FFFFFF !important;

@@ -10,6 +10,7 @@ import { save, load } from 'settings';
 import * as uploader from 'uploader';
 import * as hooks from 'hooks';
 import * as alerts from 'alerts';
+import * as helpers from 'helpers';
 import { serviceTypes } from '../../lib/rechargeDefine';
 
 export function init() {
@@ -23,6 +24,7 @@ function handleSettingsForm() {
 		setupColorInputs();
 		handleServiceId();
 		handleDirectAddReputation();
+		handleDirectAddVipDay();
 	});
 
 	$('#save').on('click', () => {
@@ -40,6 +42,26 @@ function handleDirectAddReputation() {
 				return alerts.error(err);
 			}
 			alerts.success(`增加声望成功，用户现在的声望值为：${currentReputation}`);
+		}); 
+	});
+}
+
+function handleDirectAddVipDay() {
+	$('#start-add-vip-day').on('click', function (event) {
+		socket.emit('admin.plugins.recharge.directAddVipDays', {
+			userName: $('#vip-add-user-name').val(),
+			days: $('#vip-add-day-value').val(),
+		}, function (err, expireTime) {
+			if (err) {
+				return alerts.error(err);
+			}
+
+			if (!expireTime) {
+				alerts.success("已经成功关停vip服务");
+			} else {
+				alerts.success(`您的vip有限期到:${helpers.isoTimeToLocaleString(expireTime)}`);
+			}
+			
 		}); 
 	});
 }

@@ -43,6 +43,7 @@
     "lint-staged": "14.0.1"
   },
   "dependencies": {
+    "async": "^3.2.4",
     "node-fetch-commonjs": "^3.3.1"
   }
 }

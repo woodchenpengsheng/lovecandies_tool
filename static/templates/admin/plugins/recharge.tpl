@@ -20,7 +20,26 @@
 					<div class="mb-3">
 						<div class="card">
 							<div class="card-body">
-								<h5 class="card-title">GM直接增加声望接口</h5>
+								<h5 class="card-title">VIP服务接口</h5>
+								<label class="form-label">请输入用户的userName</label>
+								<input type="text" id="vip-add-user-name" class="form-control">
+								<label class="form-label">请输入开通几天vip</label>
+								<input type="text" id="vip-add-day-value" class="form-control mb-4">
+								<button type="button" class="btn btn-danger" id="start-add-vip-day" class="form-control">增加vip期限</button>
+								<div class="mt-3">
+									<label class="form-label" for="close-vip-cost-entry">是否关停vip充值入口</label>
+									<input type="text" id="close-vip-cost-entry" name="close-vip-cost-entry" title="close-vip-cost-entry"
+										class="form-control" placeholder="true" />
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="mb-3">
+						<div class="card">
+							<div class="card-body">
+								<h5 class="card-title">增加声望接口</h5>
 								<label class="form-label">请输入用户的userName</label>
 								<input type="text" id="reputation-add-user-name" class="form-control">
 								<label class="form-label">请输入增加的声望值</label>

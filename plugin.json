@@ -6,9 +6,13 @@
 		{ "hook": "static:api.routes", "method": "addRoutes" },
 		{ "hook": "filter:admin.header.build", "method": "addAdminNavigation" },
 		{ "hook": "filter:middleware.authenticate", "method": "authenticateSkip"},
-		{ "hook": "filter:topic.get", "method": "getThemeTopicData"},
+		{ "hook": "filter:topic.get", "method": "getTopicData"},
 		{ "hook": "filter:topic.thread_tools", "method": "addTopicThreadTools"},
-		{ "hook": "filter:privileges.topics.get", "method": "getTopicPrivileges"}
+		{ "hook": "filter:privileges.topics.get", "method": "getTopicPrivileges"},
+		{ "hook": "action:user.delete", "method": "deleteUser"},
+		{ "hook": "filter:user.vip:canUnLock:check", "method": "vipCanUnLockCheck"},
+		{ "hook": "action:user.vip:unlock", "method": "vipUnLock"},
+		{ "hook": "action:topic.purge", "method": "topicPurge"}
 	],
 	"staticDirs": {
 		"static": "./static"
@@ -27,5 +31,6 @@
 		"../client/topic/freeReputation.js": "./static/lib/freeReputation.js",
 		"../admin/plugins/recharge.js": "./static/lib/admin.js"
 	},
-	"templates": "static/templates"
+	"templates": "static/templates",
+	"languages": "languages"
 }

@@ -1,0 +1,9 @@
+{
+    "not-enough-reputation": "你当前的声望为%1,还不够开通服务,请先充值声望。",
+    "invalid-data": "参数不合规,请检查。",
+    "reputation-unlock-succeed": "vip开通成功，您现在的声望值为：%1，vip有效期到: %2",
+    "not-vip": "您当前还不是vip，请先开通vip",
+    "vip-expire": "vip过期，需要重新开通",
+    "vip-cost-reputation-unlock": "确定消耗%1声望开通vip",
+    "not-open-now": "还没开放，稍等一下，在邀请测试中"
+}

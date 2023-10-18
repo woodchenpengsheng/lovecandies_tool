@@ -9,10 +9,14 @@ const events = require.main.require('./src/events');
 const privileges =  require.main.require('./src/privileges');
 
 const controllers = require('./lib/controllers');
+const { rechargeVipName, rechargeVipExpireName } = require('./lib/database/define');
 
 const routeHelpers = require.main.require('./src/routes/helpers');
 const socketAdmin = require.main.require('./src/socket.io/admin');
 const DataBase = require('./lib/database/index.js');
+const { formatServicesList, deleteVipTopicData, deleteVipUserData, 
+	checkVipExpire, vipUnLockTopic, checkUnLockVipPrivileges, serviceHandler } = require('./lib/rechargeHandler');
+const Topic = require('./lib/topic');
 
 const plugin = {};
 
@@ -26,7 +30,7 @@ socketAdmin.plugins.recharge.directAddReputation = async function(socket, data) 
 	const { userName, reputation } = data;
 	const reputationAdd = parseInt(reputation, 10);
 	if (!userName || !reputationAdd) {
-		throw Error("uid或者reputation参数异常");
+		throw Error("userName或者reputation参数异常");
 	}
 
 	const uid = await user.getUidByUsername(data.userName);
@@ -35,6 +39,22 @@ socketAdmin.plugins.recharge.directAddReputation = async function(socket, data) 
 	}
 
 	return await user.incrementUserReputationBy(uid, reputationAdd);
+}
+
+socketAdmin.plugins.recharge.directAddVipDays = async function(socket, data) {
+	const { userName, days } = data;
+	const daysToAdd = parseInt(days, 10);
+	if (!userName || !isFinite(daysToAdd)) {
+		throw Error("userName或者天数异常");
+	}
+
+	const uid = await user.getUidByUsername(data.userName);
+	if (!uid) {
+		throw Error('无法查找到该user，检查是否名字异常');
+	}
+
+	const { expireTime } = await serviceHandler["vip"](uid, daysToAdd);
+	return expireTime;
 }
 
 plugin.init = async (params) => {
@@ -57,6 +77,7 @@ plugin.init = async (params) => {
 	}, middleware.ensureLoggedIn], async (req, res) => {
 		winston.info(`[plugins/recharge] Navigated to ${nconf.get('relative_path')}/recharge`);
 		const rechargeData = await meta.settings.get("recharge");
+		formatServicesList(rechargeData["services-list"]);
 		res.render('recharge', { uid: req.uid, services: rechargeData["services-list"]});
 	});
 
@@ -118,10 +139,18 @@ plugin.authenticateSkip = async (data) => {
 	return data;
 }
 
-plugin.getThemeTopicData = async function(hookData) {
-	const { topic } = hookData;
-	const metaSettings = await meta.settings.get("recharge");
+plugin.getTopicData = async function(hookData) {
+	const { topic, uid } = hookData;
+	const results = await Promise.all([
+		meta.settings.get("recharge"),
+		user.getUserField(uid, rechargeVipName),
+		user.getUserField(uid, rechargeVipExpireName),
+	])
+	const metaSettings = results[0];
 	topic["unlock::consume::reputation"] = parseInt(metaSettings["assume-reputation"]);
+	topic[rechargeVipName] = results[1];
+	topic[rechargeVipExpireName] = parseInt(results[2], 10);
+	Topic.load(topic, uid);
 	return hookData;
 }
 
@@ -141,33 +170,6 @@ plugin.addTopicThreadTools = async function(hookData) {
 	return hookData;
 }
 
-// privileges	参数
-// {
-// 	'topics:reply': (privData['topics:reply'] && ((!topicData.locked && mayReply) || isModerator)) || isAdministrator,
-// 	'topics:read': privData['topics:read'] || isAdministrator,
-// 	'topics:schedule': privData['topics:schedule'] || isAdministrator,
-// 	'topics:tag': privData['topics:tag'] || isAdministrator,
-// 	'topics:delete': (privData['topics:delete'] && (isOwner || isModerator)) || isAdministrator,
-// 	'posts:edit': (privData['posts:edit'] && (!topicData.locked || isModerator)) || isAdministrator,
-// 	'posts:history': privData['posts:history'] || isAdministrator,
-// 	'posts:upvote': privData['posts:upvote'] || isAdministrator,
-// 	'posts:downvote': privData['posts:downvote'] || isAdministrator,
-// 	'posts:delete': (privData['posts:delete'] && (!topicData.locked || isModerator)) || isAdministrator,
-// 	'posts:view_deleted': privData['posts:view_deleted'] || isAdministrator,
-// 	read: privData.read || isAdministrator,
-// 	purge: (privData.purge && (isOwner || isModerator)) || isAdministrator,
-
-// 	view_thread_tools: editable || deletable,
-// 	editable: editable,
-// 	deletable: deletable,
-// 	view_deleted: isAdminOrMod || isOwner || privData['posts:view_deleted'],
-// 	view_scheduled: privData['topics:schedule'] || isAdministrator,
-// 	isAdminOrMod: isAdminOrMod,
-// 	disabled: disabled,
-// 	tid: tid,
-// 	uid: uid,
-//  cid: cid
-// }
 plugin.getTopicPrivileges = async function(privileges) {
 	const { uid, cid } = privileges;
 	const [isAdministrator, isModerator] = await Promise.all([
@@ -181,6 +183,39 @@ plugin.getTopicPrivileges = async function(privileges) {
 	}
 
 	return privileges;
+}
+
+plugin.deleteUser = async function(deleteData) {
+	await deleteVipUserData(deleteData.uid);
+}
+
+plugin.topicPurge = async function(data) {
+	await deleteVipTopicData(data.topic.tid);
+}
+
+plugin.vipCanUnLockCheck = async function(data) {
+	if (!data.canUnLock) {
+		return data;
+	}
+
+	const result = await Promise.all([
+		checkVipExpire(data.uid),
+		checkUnLockVipPrivileges(data.tid, data.uid),
+	]);
+
+	const notAllowed = result.filter((check) => !check.result);
+	if (notAllowed.length > 0) {
+		data.canUnLock = false;
+		data.msg = notAllowed[0].msg;
+	} else {
+		data.canUnLock = true;
+	}
+	return data;
+}
+
+plugin.vipUnLock = async function(value) {
+	const { caller, data } = value;
+	await vipUnLockTopic(caller, data);
 }
 
 module.exports = plugin;
