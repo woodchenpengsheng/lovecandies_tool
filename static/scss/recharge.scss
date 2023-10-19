@@ -1,1 +1,8 @@
 /* Place any SASS in here */
+button[component="recharge/pay/button"] {
+    background: #6666CC;
+}
+
+button[component="recharge/pay/button"][data-currency-reputation="true"] {
+    background: darkseagreen;
+}

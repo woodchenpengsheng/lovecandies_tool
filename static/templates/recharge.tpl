@@ -4,7 +4,7 @@
             <li>
                 <div style="/* border-bottom: 5px solid #efeff4; */display: table;width: 100%;">
                     <div style="display: table-row;">
-                        <div style="display: table-cell; vertical-align: middle;">
+                        <div style="display: table-cell; vertical-align: middle; width: 30%;">
                             <span style="
                                 background-color: #44D7B6;
                                 border-radius: 10px;
@@ -58,7 +58,6 @@
                         style="
                             width: 100%;
                             color: #FFFFFF !important;
-                            background: #6666CC !important;
                             border-radius: 15px;
                             padding: 3px 10px;
                             text-align: center;
